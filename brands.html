@@ -23,7 +23,7 @@
         <v-app light>
             <v-toolbar class="white">
                 <v-toolbar-title>
-                    {{ q }} {{ title }} 
+                    {{ q }} {{ title }}
                 </v-toolbar-title>
             </v-toolbar>
             <v-content>
@@ -34,29 +34,28 @@
                         <v-flex xs12 md6 offset-md3>
                             <v-layout>
                                 <v-flex xs6 pr-2>
-                                    <v-select :items="categories" label="Company" box v-model='q' @change="getData()"></v-select>
+                                    <v-select :items="categories" label="Company" box v-model='q' @change="getData()">
+                                    </v-select>
                                 </v-flex>
                                 <v-flex xs6>
                                     <v-text-field label="Location" v-model="l" box @change="getData()"></v-text-field>
                                 </v-flex>
                             </v-layout>
-                            <p><v-icon small color="green">
+                            <p>
+                                <v-icon small color="green">
                                     check_circle
-                                    </v-icon>Choose companies you want to work for and get hired!</p>
-                            <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                            <ins class="adsbygoogle"
-                                    style="display:block"
-                                    data-ad-format="fluid"
-                                    data-ad-layout-key="-fe+5u-1e-3k+bq"
-                                    data-ad-client="ca-pub-8453834851600545"
-                                    data-ad-slot="9613143943"></ins>
-                            <script>
-                                    (adsbygoogle = window.adsbygoogle || []).push({});
-                            </script>
+                                </v-icon>Choose companies you want to work for and get hired!
+                            </p>
+
+                            <ins class="adsbygoogle" style="display:block" data-ad-format="fluid"
+                                data-ad-layout-key="-fe+5u-1e-3k+bq" data-ad-client="ca-pub-8453834851600545"
+                                data-ad-slot="9613143943"></ins>
+
                             <v-list three-line class="grey lighten-5">
                                 <template v-for="(c, index) in categories">
-                                        <!-- && item.price=='high' -->
-                                    <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto('http://localhost:8000/api/v1/go?u='+item.url)" :key="index">
+                                    <!-- && item.price=='high' -->
+                                    <v-list-tile class="elevation-2 mb-2 round-list white"
+                                        @click="goto('http://localhost:8000/api/v1/go?u='+item.url)" :key="index">
                                         <!-- <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img>
                                         </v-list-tile-avatar> -->
@@ -85,7 +84,7 @@
     <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
-    
+
     <script>
         new Vue({
             el: '#app',
@@ -103,14 +102,14 @@
                     window.open(url, '_blank');
                 },
                 getData() {
-                    let url = "http://localhost:8000/api/v1/j/0/"+this.q+"/"+this.l
+                    let url = "http://localhost:8000/api/v1/j/0/" + this.q + "/" + this.l
                     axios
                         .get(url)
                         .then(response => {
                             this.items = _.uniqBy(response.data['jobs'], 'company');
                         });
                 },
-                checkTitle(a,q) {
+                checkTitle(a, q) {
                     return a.includes(q);
                 }
             },
@@ -118,6 +117,10 @@
                 this.getData();
             },
         })
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
     </script>
 </body>
 
