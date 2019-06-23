@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job List</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <style>
+        .v-list--three-line .v-list__tile {
+            height: 72px !important;
+        }
+
+        .round-list {
+            border-radius: 10px;
+        }
+    </style>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+</head>
+
+<body>
+    <div id="app">
+        <v-app light>
+            <v-toolbar class="white">
+                <v-toolbar-title>
+                    {{ title }} 
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-content>
+
+
+                <v-layout column align-center justify-center>
+                    <v-container fluid>
+                        <v-flex xs12 md6 offset-md3>
+                            <v-card class="elevation-2 mb-2 round-list white">
+                                <v-card-title>Let employers find you.</v-card-title>
+                                <v-card-text>
+                                    <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select>
+                                    <v-text-field label="Zipcode" v-model="form.zipcode" box></v-text-field>
+                                    <v-text-field label="Email" v-model="form.email" box></v-text-field>
+                                </v-card-text>
+                                <v-card-actions class="pb-4">
+                                    <v-btn depressed round block color="primary" @click="subscribe()">Apply</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                            
+                        </v-flex>
+                    </v-container>
+                </v-layout>
+            </v-content>
+        </v-app>
+    </div>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    title: 'Apply to Top Brands Near You',
+                    k: [],
+                    positions: ['Sales', 'Marketing', 'Cashier'],
+                    form: {
+                        email: "",
+                        q: "",
+                        zipcode: ""
+                    }
+                }
+            },
+            methods: {
+                goto(url) {
+                    window.open(url, '_blank');
+                },
+                subscribe() {
+                    var i;
+                    let k = this.k;
+                    
+                    for (i = 0; i < k.length; i++) { 
+                        axios.post('http://localhost:8000/api/v1/subscription/addq', {email:this.form['email'], q: k[i], zipcode: this.form['zipcode']})
+                            .then(function (response) {
+                                    console.log(response);
+                                })
+                    }
+                    
+                }
+            },
+            created() {
+            },
+        })
+    </script>
+</body>
+
+</html>
