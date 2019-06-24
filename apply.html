@@ -83,7 +83,7 @@
                     let k = this.k;
                     
                     for (i = 0; i < k.length; i++) { 
-                        axios.post('http://localhost:8000/api/v1/subscription/addq', {email:this.form['email'], q: k[i], zipcode: this.form['zipcode']})
+                        axios.post('http://api.apply-now.io/api/v1/subscription/addq', {email:this.form['email'], q: k[i], zipcode: this.form['zipcode']})
                             .then(function (response) {
                                     console.log(response);
                                 })

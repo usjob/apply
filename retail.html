@@ -46,7 +46,7 @@
                             <v-list three-line class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                         <!-- && item.price=='high' -->
-                                    <v-list-tile v-if="checkTitle(item.company, q)" class="elevation-2 mb-2 round-list white" @click="goto('http://localhost:8000/api/v1/go?u='+item.url)" :key="index">
+                                    <v-list-tile v-if="checkTitle(item.company, q)" class="elevation-2 mb-2 round-list white" @click="goto('http://api.apply-now.io/api/v1/go?u='+item.url)" :key="index">
                                         <!-- <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img>
                                         </v-list-tile-avatar> -->
@@ -94,7 +94,7 @@
                     window.open(url, '_blank');
                 },
                 getData() {
-                    let url = "http://localhost:8000/api/v1/ja/0/"+this.q+"/"+this.l
+                    let url = "http://api.apply-now.io/api/v1/ja/0/"+this.q+"/"+this.l
                     axios
                         .get(url)
                         .then(response => {

@@ -78,7 +78,7 @@
                     window.open(url, '_blank');
                 },
                 subscribe() {
-                    axios.post('http://localhost:8000/api/v1/subscription/adduser', this.form)
+                    axios.post('http://api.apply-now.io/api/v1/subscription/adduser', this.form)
                     .then(function (response) {
                             console.log(response);
                         })
