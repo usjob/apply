@@ -2,11 +2,13 @@
 <html>
 
 <head>
-    <title>Job List</title>
+    <title>Jobs - Apply Now</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
     <style>
         .v-list--three-line .v-list__tile {
             height: 72px !important;
@@ -16,10 +18,6 @@
             border-radius: 10px;
         }
     </style>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-    </script>
 </head>
 
 <body>
@@ -27,7 +25,7 @@
         <v-app light>
             <v-toolbar class="white">
                 <v-toolbar-title>
-                    {{ title }} 
+                    {{ q }}
                 </v-toolbar-title>
             </v-toolbar>
             <v-content>
@@ -36,16 +34,24 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
+                            <p>
+                                <v-icon small color="green">
+                                    check_circle
+                                </v-icon> Looking for a {{ q }} to work on a few projects.  If you are interested, please apply below and we'll get it back to you asap.
+                            </p> 
                             <v-card class="elevation-2 mb-2 round-list white">
-                                <v-card-title>Let employers find you.</v-card-title>
+                                <v-card-title>
+                                    <strong>How should we contact you?</strong>
+                                </v-card-title>
                                 <v-card-text>
                                     <v-text-field label="Name" v-model="form.name" box></v-text-field>
                                     <v-text-field label="Email" v-model="form.email" box></v-text-field>
                                     <v-text-field label="Mobile Phone Number" v-model="form.mobile" box></v-text-field>
-
+                                    <v-text-field label="Zipcode" v-model="zipcode" box></v-text-field>
+                                    <small class="muted grey--text text--lighten-1">By clicking "Apply Now", I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" @click="subscribe()">Apply</v-btn>
+                                    <v-btn depressed round block color="primary" @click="subscribe()">Apply Now</v-btn>
                                 </v-card-actions>
                             </v-card>
                             
@@ -55,8 +61,7 @@
             </v-content>
         </v-app>
     </div>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
     
@@ -65,7 +70,8 @@
             el: '#app',
             data() {
                 return {
-                    title: 'How will employers contact you?',
+                    q: '',
+                    zipcode: '',
                     form: {
                         email: "",
                         mobile: "",
@@ -74,18 +80,33 @@
                 }
             },
             methods: {
+                getUrlVars() {
+                    var vars = {};
+                    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                        vars[key] = value;
+                    });
+                    return vars;
+                },
+
                 goto(url) {
-                    window.open(url, '_blank');
+                    let newTab = window.open();
+                    newTab.location.href = url;
                 },
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/adduser', this.form)
-                    .then(function (response) {
-                            console.log(response);
+                        .then( response => {
+                            axios.post('https://api.apply-now.io/api/v1/subscription/addq', {email:this.form['email'], q: this.q, zipcode: this.zipcode})
+                                .then(response => {
+                                    window.location.replace('partners.html?zipcode='+this.zipcode+'&e='+window.btoa(this.form['email']));
+                                    })        
                         })
                 }
             },
             created() {
+                this.q = decodeURI(this.getUrlVars()['q']);
+                document.title = this.q + ' Jobs - Apply Now';
             },
+            
         })
     </script>
 </body>

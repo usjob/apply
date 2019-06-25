@@ -7,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
     <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
     <style>
         .v-list--three-line .v-list__tile {
             height: 72px !important;
@@ -54,8 +56,7 @@
             </v-content>
         </v-app>
     </div>
-    <script src="https://unpkg.com/vue/dist/vue.js"></script>
-    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
     
@@ -76,7 +77,9 @@
             },
             methods: {
                 goto(url) {
-                    window.open(url, '_blank');
+                    url = 'https://api.apply-now.io/api/v1/go?u='+url;
+                    let newTab = window.open();
+                    newTab.location.href = url;
                 },
                 subscribe() {
                     var i;
