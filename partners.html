@@ -46,9 +46,9 @@
                                     <!-- && item.price=='high' -->
                                     <v-list-tile class="elevation-2 mb-2 round-list white"
                                         @click="goto(c.link, c.title)" :key="index">
-                                        <!-- <v-list-tile-avatar tile size="48" class="mt-1">
-                                            <img>
-                                        </v-list-tile-avatar> -->
+                                        <v-list-tile-avatar tile size="48" class="mt-1">
+                                            <img :src="item.logo_url">
+                                        </v-list-tile-avatar>
 
                                         <v-list-tile-content class="mt-1">
                                             <v-list-tile-title>

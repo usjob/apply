@@ -34,30 +34,24 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
-                            <v-layout>
-                                <v-flex xs6 pr-2>
-                                    <v-select :items="categories" label="Job type" box v-model='q' @change="getData()"></v-select>
-                                </v-flex>
-                                <v-flex xs6>
-                                    <v-text-field label="Location" v-model="l" box @change="getData()"></v-text-field>
-                                </v-flex>
-                            </v-layout>
+                            <v-select :items="categories" label="Select Job" box v-model='q' @change="getData()"></v-select>
                             <p><v-icon small color="green">
                                     check_circle
-                                    </v-icon>Apply to all the companies that hiring you.  Get hired tomorrow!</p>
+                                    </v-icon> All companies hiring {{ q }}. Click to apply!
+                            </p>
                             <v-list three-line class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                         <!-- && item.price=='high' -->
-                                    <v-list-tile v-if="checkTitle(item.company, q)" class="elevation-2 mb-2 round-list white" @click="goto('https://api.apply-now.io/api/v1/go?u='+item.url)" :key="index">
-                                        <!-- <v-list-tile-avatar tile size="48" class="mt-1">
-                                            <img>
-                                        </v-list-tile-avatar> -->
+                                    <v-list-tile v-if="checkTitle(item.title, q)" class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
+                                        <v-list-tile-avatar tile size="48" class="mt-1">
+                                            <img :src="item.logo_url">
+                                        </v-list-tile-avatar>
 
                                         <v-list-tile-content class="mt-1">
                                             <v-list-tile-title>
-                                                <strong>{{ item.title }}</strong>
+                                                <strong>{{ item.company }}</strong>
                                             </v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ item.company }} - {{ item.city[0] }}</v-list-tile-sub-title>
+                                            <v-list-tile-sub-title>{{ item.city[0] }}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
                                         <v-list-tile-action>
@@ -85,12 +79,19 @@
                 return {
                     title: 'Hiring - Apply Now',
                     items: [],
-                    categories: ['Walmart', 'Home Depot', 'Target', 'HEB', 'Walgreens', 'Dollar General'],
-                    l: "Austin, TX",
-                    q: "Walmart"
+                    categories: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
+                    l: "",
+                    q: "Driver"
                 }
             },
             methods: {
+                getUrlVars() {
+                    var vars = {};
+                    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                        vars[key] = value;
+                    });
+                    return vars;
+                },
                 goto(url) {
                     url = 'https://api.apply-now.io/api/v1/go?u='+url;
                     let newTab = window.open();
@@ -101,7 +102,7 @@
                     axios
                         .get(url)
                         .then(response => {
-                            this.items = _.uniqBy(response.data['jobs'], 'title');
+                            this.items = _.uniqBy(response.data['jobs'], 'company');
                         });
                 },
                 checkTitle(a,q) {
@@ -109,6 +110,7 @@
                 }
             },
             created() {
+                this.l = decodeURI(this.getUrlVars()['l']);
                 this.getData();
             },
         })
