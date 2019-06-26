@@ -50,10 +50,10 @@
                                 </v-card-title>
                                 <v-card-text>
                                     <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
-                                    <v-text-field label="Position" v-model="form.q" box  @change="checkdisabled()"></v-text-field>
+                                    <v-text-field label="Job title" v-model="form.q" box  @change="checkdisabled()"></v-text-field>
                                     <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####" @change="checkdisabled()"></v-text-field>
                                     <v-text-field label="Email" v-model="form.email" box @change="checkdisabled()"></v-text-field>
-                                    <small class="muted grey--text text--lighten-1">By clicking "Apply Now", I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
+                                    <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
                                     <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
@@ -116,7 +116,12 @@
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                             .then((response) => {
-                                window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.form['q']);
+                                axios.get('https://api.apply-now.io/api/v1/ju/'+this.encodeUrl(this.form['q'])+'/'+this.form['zipcode'])
+                                        .then(response =>{
+                                            this.goto(response['data']) 
+                                            window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.encodeUrl(this.form['q']));
+                                        })
+                                
                             })
                     // var i;
                     // let k = this.k;
@@ -132,6 +137,11 @@
                     //             window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email']));
                     //             })
                     
+                },
+                encodeUrl(q) {
+                    q1 = q.replace('/', ' ')
+                    q1 = q1.replace(/\s{2,}/i, " ")
+                    return encodeURI(q1)
                 },
                 checkdisabled() {
                     if(this.form['email'] !='' && this.form['zipcode'] != '' && this.form['q'] != '') this.disabled = false;

@@ -35,7 +35,7 @@
         <v-app light>
             <v-toolbar class="white">
                 <v-toolbar-title>
-                    {{ q }} {{ title }} 
+                    {{ title }} 
                 </v-toolbar-title>
             </v-toolbar>
             <v-content>
@@ -44,8 +44,7 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
-                            <!-- <v-select :items="categories" label="Select Job" box v-model='q' @change="getData()"></v-select> -->
-                            <v-text-field label="Position" v-model="q" box  @blur="getData()"></v-text-field>
+                            <v-text-field label="Job title" v-model="q" box  @blur="getData()"></v-text-field>
                             <p>
                                 <v-icon small color="green">check_circle</v-icon> 
                                 All companies hiring {{ q }}. Click to apply!
@@ -59,14 +58,14 @@
                                         </v-list-tile-avatar>
 
                                         <v-list-tile-content class="mt-1">
-                                            <v-list-tile-title>
-                                                <strong>{{ item.company }}</strong>
+                                            <v-list-tile-title class="blue--text text--darken-3">
+                                                <strong>{{ normalize(item.company) }}</strong>
                                             </v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ item.city[0] }}</v-list-tile-sub-title>
+                                            <v-list-tile-sub-title>{{ normalize(item.title) }}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
                                         <v-list-tile-action>
-                                            <v-btn depressed round small color="primary">View</v-btn>
+                                            <v-btn depressed round small color="primary">Apply</v-btn>
                                         </v-list-tile-action>
 
                                     </v-list-tile>
@@ -88,9 +87,8 @@
             el: '#app',
             data() {
                 return {
-                    title: 'Hiring - Apply Now',
+                    title: 'Companies Hiring - Click to Apply',
                     items: [],
-                    categories: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     l: "",
                     q: "Driver"
                 }
@@ -109,17 +107,26 @@
                     newTab.location.href = url;
                 },
                 getData() {
-                    let url = "https://api.apply-now.io/api/v1/ja/0/"+this.q+"/"+this.l
+                    let url = "https://api.apply-now.io/api/v1/ja/0/"+this.encodeUrl(this.q)+"/"+this.l
                     axios
                         .get(url)
                         .then(response => {
                             this.items = _.uniqBy(response.data['jobs'], 'company');
                         });
                 },
+                encodeUrl(q) {
+                    q1 = q.replace('/', ' ')
+                    q1 = q1.replace(/\s{2,}/i, " ")
+                    return encodeURI(q1)
+                },
                 checkTitle(a,q) {
                     a1 = a.toLowerCase()
                     q1 = q.toLowerCase()
                     return a1.includes(q1);
+                },
+                normalize(s) {
+                    if(s.length > 20 ) return s.substring(0,20)+'...'
+                    return s
                 }
             },
             created() {
