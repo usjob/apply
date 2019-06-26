@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Job List</title>
+    <title>Click to Apply Now</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -35,7 +35,7 @@
         <v-app light>
             <v-toolbar class="white">
                 <v-toolbar-title>
-                    {{ q }} {{ title }} 
+                    {{ title }} 
                 </v-toolbar-title>
             </v-toolbar>
             <v-content>
@@ -45,34 +45,35 @@
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
                             <!-- <v-select :items="categories" label="Select Job" box v-model='q' @change="getData()"></v-select> -->
-                            <v-text-field label="Position" v-model="q" box  @blur="getData()"></v-text-field>
+                            <v-text-field label="Job title" v-model="q" box  @blur="getData()"></v-text-field>
                             <p>
                                 <v-icon small color="green">check_circle</v-icon> 
-                                All companies hiring {{ q }}. Click to apply!
+                                All companies are hiring {{ q }}. Click to apply!
                             </p>
                             <v-list three-line class="grey lighten-5">
-                                <template v-for="(item, index) in items">
+                                <template v-for="(item, index) in items.slice(0, 25) ">
                                         <!-- && item.price=='high' -->
-                                    <v-list-tile v-if="checkTitle(item.title, q)" class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
+                                    <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
                                         <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img :src="item.logo_url">
                                         </v-list-tile-avatar>
 
                                         <v-list-tile-content class="mt-1">
-                                            <v-list-tile-title>
-                                                <strong>{{ item.company }}</strong>
+                                            <v-list-tile-title class="blue--text text--darken-3">
+                                                <strong>{{ normalize(item.company) }}</strong>
                                             </v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ item.city[0] }}</v-list-tile-sub-title>
+                                            <v-list-tile-sub-title>{{ normalize(item.title)}}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
-                                        <v-list-tile-action>
-                                            <v-btn depressed round small color="primary">View</v-btn>
-                                        </v-list-tile-action>
+                                        <!-- <v-list-tile-action>
+                                            <v-btn depressed round small color="primary">Apply</v-btn>
+                                        </v-list-tile-action> -->
 
                                     </v-list-tile>
 
                                 </template>
                             </v-list>
+                            
                         </v-flex>
                     </v-container>
                 </v-layout>
@@ -88,7 +89,7 @@
             el: '#app',
             data() {
                 return {
-                    title: 'Hiring - Apply Now',
+                    title: 'Companies Hiring - Click to Apply',
                     items: [],
                     categories: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     l: "",
@@ -108,25 +109,38 @@
                     let newTab = window.open();
                     newTab.location.href = url;
                 },
-                getData() {
-                    let url = "https://api.apply-now.io/api/v1/ja/0/"+this.q+"/"+this.l
-                    axios
-                        .get(url)
-                        .then(response => {
-                            this.items = _.uniqBy(response.data['jobs'], 'company');
-                        });
-                },
-                checkTitle(a,q) {
+                checkTitle(a,q,c) {
                     a1 = a.toLowerCase()
                     q1 = q.toLowerCase()
+                    c1 = c.toLowerCase()
+                    if(c1.includes('ad') || c1.includes('confidential')) return false;
                     return a1.includes(q1);
+                },
+                getData() {
+                    let url = "https://api.apply-now.io/api/v1/ja/0/"+this.q+"/"+this.l
+                    axios.get(url)
+                        .then((response) => {
+                            items = _.uniqBy(response.data['jobs'], 'company');
+                            this.items = _.remove(items, (n) => {
+                                a1 = n.title.toLowerCase()
+                                q1 = this.q.toLowerCase()
+                                c1 = n.company.toLowerCase()
+                                if(c1.includes('ad') || c1.includes('confidential')) return false;
+                                return a1.includes(q1) && n.price != 'low';
+                            });
+                        });
+                },
+                
+                normalize(s) {
+                    if(s.length > 30 ) return s.substring(0,30)+'...'
+                    return s
                 }
             },
             created() {
                 this.l = decodeURI(this.getUrlVars()['l']);
                 this.q = decodeURI(this.getUrlVars()['q']);
                 this.getData();
-            },
+            }
         })
     </script>
 </body>

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Job List</title>
+    <title>Hiring Now - Apply Today</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -46,17 +46,17 @@
                         <v-flex xs12 md6 offset-md3>
                             <v-card class="elevation-2 mb-2 round-list white">
                                 <v-card-title>
-                                    <b>Start Your Applications</b>
+                                    <b>Start Finding Companies Hiring Now</b>
                                 </v-card-title>
                                 <v-card-text>
                                     <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
-                                    <v-text-field label="Position" v-model="form.q" box  @change="checkdisabled()"></v-text-field>
+                                    <v-text-field label="Job title" v-model="form.q" box  @change="checkdisabled()"></v-text-field>
                                     <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####" @change="checkdisabled()"></v-text-field>
                                     <v-text-field label="Email" v-model="form.email" box @change="checkdisabled()"></v-text-field>
-                                    <small class="muted grey--text text--lighten-1">By clicking "Apply Now", I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
+                                    <small class="muted grey--text text--lighten-1">By clicking the button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
+                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">View Companies Hiring</v-btn>
                                 </v-card-actions>
                             </v-card>
                             <p class="pt-3">
@@ -116,7 +116,13 @@
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                             .then((response) => {
-                                window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.form['q']);
+                                // let q = this.form['q'].replace('/', '');
+                                // axios.get('https://api.apply-now.io/api/v1/ju/'+encodeURI(q)+'/'+this.form['zipcode'])
+                                //         .then(response =>{
+                                //             this.goto(response['data']) 
+                                            window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.form['q']);
+                                        // })
+                                
                             })
                     // var i;
                     // let k = this.k;
