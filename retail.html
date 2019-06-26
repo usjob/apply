@@ -44,10 +44,11 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
-                            <v-select :items="categories" label="Select Job" box v-model='q' @change="getData()"></v-select>
-                            <p><v-icon small color="green">
-                                    check_circle
-                                    </v-icon> All companies hiring {{ q }}. Click to apply!
+                            <!-- <v-select :items="categories" label="Select Job" box v-model='q' @change="getData()"></v-select> -->
+                            <v-text-field label="Position" v-model="q" box  @blur="getData()"></v-text-field>
+                            <p>
+                                <v-icon small color="green">check_circle</v-icon> 
+                                All companies hiring {{ q }}. Click to apply!
                             </p>
                             <v-list three-line class="grey lighten-5">
                                 <template v-for="(item, index) in items">
@@ -61,7 +62,7 @@
                                             <v-list-tile-title>
                                                 <strong>{{ item.company }}</strong>
                                             </v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ item.city[0] }}</v-list-tile-sub-title>
+                                            <v-list-tile-sub-title>{{ item.title }} {{ item.city[0] }}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
                                         <v-list-tile-action>
@@ -116,11 +117,14 @@
                         });
                 },
                 checkTitle(a,q) {
-                    return a.includes(q);
+                    a1 = a.toLowerCase()
+                    q1 = q.toLowerCase()
+                    return a1.includes(q1);
                 }
             },
             created() {
                 this.l = decodeURI(this.getUrlVars()['l']);
+                this.q = decodeURI(this.getUrlVars()['q']);
                 this.getData();
             },
         })
