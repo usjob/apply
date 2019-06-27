@@ -116,12 +116,7 @@
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                             .then((response) => {
-                                axios.get('https://api.apply-now.io/api/v1/ju/'+this.encodeUrl(this.form['q'])+'/'+this.form['zipcode'])
-                                        .then(response =>{
-                                            this.goto(response['data']) 
-                                            window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.encodeUrl(this.form['q']));
-                                        })
-                                
+                                window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.encodeUrl(this.form['q']));
                             })
                     // var i;
                     // let k = this.k;
