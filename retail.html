@@ -52,7 +52,7 @@
                             <v-list three-line class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                         <!-- && item.price=='high' -->
-                                    <v-list-tile v-if="checkTitle(item.title, q)" class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
+                                    <v-list-tile v-if="checkTitle(item.title, q, item.company)" class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
                                         <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img :src="item.logo_url">
                                         </v-list-tile-avatar>
@@ -119,9 +119,11 @@
                     q1 = q1.replace(/\s{2,}/i, " ")
                     return encodeURI(q1)
                 },
-                checkTitle(a,q) {
+                checkTitle(a,q,c) {
                     a1 = a.toLowerCase()
                     q1 = q.toLowerCase()
+                    c1 = c.toLowerCase()
+                    if(c1.includes('ad') || c1.includes('confidential')) return false;
                     return a1.includes(q1);
                 },
                 normalize(s) {
