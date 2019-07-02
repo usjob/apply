@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job List</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+    <style>
+        .v-list--three-line .v-list__tile {
+            height: 72px !important;
+        }
+
+        .round-list {
+            border-radius: 10px;
+        }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142791202-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-142791202-1');
+    </script>
+
+</head>
+
+<body>
+    <div id="app">
+        <v-app light>
+            <v-toolbar class="white">
+                <v-toolbar-title>
+                    {{ title }} 
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-content>
+
+
+                <v-layout column align-center justify-center>
+                    <v-container fluid>
+                        <v-flex xs12 md6 offset-md3>
+                            <v-card class="elevation-2 mb-2 round-list white">
+                                <v-card-title>
+                                    <b>Start Your Applications</b>
+                                </v-card-title>
+                                <v-card-text>
+                                    <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
+                                    <v-text-field label="Position" v-model="form.q" box  @change="checkdisabled()" v-if='show_q'></v-text-field>
+                                    <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####" @change="checkdisabled()" v-if='show_l'></v-text-field>
+                                    <v-text-field label="Mobile" v-model="form.mobile" box @change="checkdisabled()" mask="phone"></v-text-field>
+                                    <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
+                                </v-card-text>
+                                <v-card-actions class="pb-4">
+                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                            <p class="pt-3">
+                                <i>Get Hired by Top Employers...</i>
+                            </p>
+                            <v-layout>
+                                
+                                <v-flex xs3>
+                                    <v-img src="https://logo.clearbit.com/walmart.com" aspect-ratio="1" alta="employer 1"></v-img>
+                                </v-flex>
+                                <v-flex xs1></v-flex>
+                                <v-flex xs3>
+                                    <v-img src="https://logo.clearbit.com/target.com" aspect-ratio="1" alta="employer 2"></v-img>
+                                </v-flex>
+                                <v-flex xs1></v-flex>
+                                <v-flex xs3>
+                                    <v-img src="https://logo.clearbit.com/costco.com" aspect-ratio="1" alta="employer 3"></v-img>
+                                </v-flex>
+                                <v-flex xs1></v-flex>
+                                <v-flex xs3>
+                                    <v-img src="https://logo.clearbit.com/walgreens.com" aspect-ratio="1" alta="employer 3"></v-img>
+                                </v-flex>
+                            </v-layout>
+                            
+                        </v-flex>
+                    </v-container>
+                </v-layout>
+            </v-content>
+        </v-app>
+    </div>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+    
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    disabled: true,
+                    title: 'Hiring Now, Apply Today',
+                    k: ['Cashier', 'Sales Associate','Driver', 'Customer Service'],
+                    positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
+                    form: {
+                        mobile: "",
+                        q: "",
+                        zipcode: ""
+                    },
+                    show_q: true,
+                    show_l: true
+                }
+            },
+            methods: {
+                getUrlVars() {
+                    var vars = {};
+                    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+                        vars[key] = value;
+                    });
+                    return vars;
+                },
+                goto(url) {
+                    url = 'https://api.apply-now.io/api/v1/go?u='+url;
+                    let newTab = window.open();
+                    newTab.location.href = url;
+                },
+                subscribe() {
+                    axios.post('https://api.apply-now.io/api/v1/subscription/addmq', this.form)
+                            .then((response) => {
+                                window.location.replace('retail.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
+                            })
+                },
+                encodeUrl(q) {
+                    q1 = q.replace('/', ' ')
+                    q1 = q1.replace(/\s{2,}/i, " ")
+                    return encodeURI(q1)
+                },
+                checkdisabled() {
+                    if(this.form['mobile'] !='' && this.form['zipcode'] != '' && this.form['q'] != '') this.disabled = false;
+                    else this.disabled = true;
+                }
+            },
+            created() {
+                let vars = this.getUrlVars()
+                if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
+                if('q' in vars) this.form['q'] = decodeURI(this.getUrlVars()['q']);
+                // if(this.form['q'] != '') this.show_q = false
+                // if(this.form['zipcode'] != '') this.show_l = false
+            }
+        })
+    </script>
+</body>
+
+</html>
