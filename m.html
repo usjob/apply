@@ -46,13 +46,13 @@
                         <v-flex xs12 md6 offset-md3>
                             <v-card class="elevation-2 mb-2 round-list white">
                                 <v-card-title>
-                                    <b>Start Your Applications</b>
+                                    <b>Fill form below and view openings</b>
                                 </v-card-title>
                                 <v-card-text>
                                     <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
                                     <v-text-field label="Position" v-model="form.q" box  @change="checkdisabled()" v-if='show_q'></v-text-field>
                                     <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####" @change="checkdisabled()" v-if='show_l'></v-text-field>
-                                    <v-text-field label="Mobile" v-model="form.mobile" box @change="checkdisabled()" mask="phone"></v-text-field>
+                                    <v-text-field label="Mobile Phone Number" v-model="form.mobile" box @change="checkdisabled()" mask="phone"></v-text-field>
                                     <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
@@ -97,7 +97,7 @@
             data() {
                 return {
                     disabled: true,
-                    title: 'Hiring Now, Apply Today',
+                    title: 'Start Your Application',
                     k: ['Cashier', 'Sales Associate','Driver', 'Customer Service'],
                     positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     form: {
@@ -125,7 +125,7 @@
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addmq', this.form)
                             .then((response) => {
-                                window.location.replace('retail.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
+                                window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
                             })
                 },
                 encodeUrl(q) {
