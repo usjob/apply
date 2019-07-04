@@ -34,6 +34,7 @@
         gtag('js', new Date());
 
         gtag('config', 'UA-142791202-1');
+        gtag('config', 'AW-770861134');
     </script>
 
 </head>
@@ -180,6 +181,7 @@
                         'event_label':  window.btoa(this.mobile)+'..'+this.q,
                         'value': 1
                     });
+                    gtag('event', 'conversion', {'send_to': 'AW-770861134/e8BoCKXb9aQBEM7Qye8C'});
                     // end ga event
                     url = 'https://api.apply-now.io/api/v1/go?u=' + url;
                     let newTab = window.open();
@@ -196,6 +198,7 @@
                 },
                 saveData() {
                     // ga event
+                    gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
                     gtag('event', 'mobile_submitted', {
                         'event_category': 'mobile_submitted',
                         'event_label': window.btoa(this.mobile)+'..'+this.q,
