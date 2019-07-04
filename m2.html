@@ -94,7 +94,7 @@
                             <v-list three-line class="grey lighten-5" v-if="items.length > 0">
                                 <template v-for="(item, index) in items">
                                     <!-- && item.price=='high' -->
-                                    <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
+                                    <v-list-tile v-if="checkTitle(item.title, q, item.company)" class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
                                         :key="index">
                                         <!-- <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img :src="item.logo_url">
