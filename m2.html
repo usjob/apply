@@ -81,16 +81,17 @@
 
                             </v-bottom-sheet>
 
+                            <div class="text-xs-center" v-if="items.length === 0">
+                                
+                                <v-progress-circular :size="50" color="primary" indeterminate>
+                                </v-progress-circular>
+                                <p class='title mt-3' v-if="q==''">Enter position below to view current openings.</p>
+                            </div>
 
-
-                            <p class="text-xs-center">
+                            <p class="text-xs-center" v-if="items.length > 0">
                                 <v-icon small color="green">check_circle</v-icon>
                                 Current {{ q }} openings in {{ location }}- click to apply!
                             </p>
-                            <div class="text-xs-center">
-                                <v-progress-circular :size="50" color="primary" indeterminate v-if="items.length === 0">
-                                </v-progress-circular>
-                            </div>
                             <v-list three-line class="grey lighten-5" v-if="items.length > 0">
                                 <template v-for="(item, index) in sponsored">
                                     <!-- && item.price=='high' -->
@@ -156,7 +157,7 @@
                     items: [],
                     sponsored: [],
                     l: "",
-                    q: "Truck Driver",
+                    q: "",
                     location: "",
                     mobile: "",
                     dialog: true,
@@ -242,7 +243,7 @@
                     
                     
                     if(q1.includes('truck')) {
-                        let e1 = ["Stevens Transport","Starsky Robotics","Buchanan Hauling & Rigging","Dick Lavy Trucking","BCT","Southwestern Nevada","FedEx Custom Critical","Instacart","Boyd Brothers Transportation","CalArk","Tyson Foods","Schneider", "Uber"];
+                        let e1 = ["Stevens Transport","Starsky Robotics","Buchanan Hauling","Dick Lavy","BCT","Southwestern Nevada","FedEx Custom Critical","Instacart","Boyd Brothers Transportation","CalArk","Tyson Foods","Schneider", "Uber"];
                         for(let i=0; i<e1.length; i++) {
                             
                             if(c1.includes(e1[i].toLowerCase()))  return false;
@@ -272,7 +273,7 @@
             },
             created() {
                 if (this.getUrlVars() && 'q' in this.getUrlVars()) this.q = decodeURI(this.getUrlVars()['q']);
-                this.getData();
+                if(this.q !='') this.getData();
             },
         })
     </script>
