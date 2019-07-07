@@ -161,7 +161,7 @@
                     }
                 },
                 getResult() {
-                    let url = "https://api.apply-now.io/api/v1/j/0/" + this.encodeUrl(this.form['q']) + "/" + this.form['zipcode']
+                    let url = "https://api.apply-now.io/api/v1/ja/0/" + this.encodeUrl(this.form['q']) + "/" + this.form['zipcode']
                     axios
                         .get(url)
                         .then(response => {
