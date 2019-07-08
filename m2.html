@@ -197,13 +197,14 @@
                     // end ga event
                 },
                 saveData() {
+                    
                     // ga event
-                    gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
-                    gtag('event', 'mobile_submitted', {
-                        'event_category': 'mobile_submitted',
-                        'event_label': window.btoa(this.mobile)+'..'+this.q,
+                    gtag('event', 'subscribe', {
+                        'event_category': 'm2_submitted',
+                        'event_label': window.btoa(this.form['mobile']),
                         'value': 2
                     });
+                    gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
                     // end ga event
                     axios.post('https://api.apply-now.io/api/v1/subscription/addmq', {
                             mobile: this.mobile,

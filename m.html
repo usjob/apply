@@ -26,6 +26,7 @@
     gtag('js', new Date());
 
     gtag('config', 'UA-142791202-1');
+    gtag('config', 'AW-770861134');
     </script>
 
 </head>
@@ -123,6 +124,14 @@
                     newTab.location.href = url;
                 },
                 subscribe() {
+                    // ga event
+                    gtag('event', 'subscribe', {
+                        'event_category': 'm_submitted',
+                        'event_label': window.btoa(this.form['mobile']),
+                        'value': 2
+                    });
+                    gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
+                    // end ga event
                     axios.post('https://api.apply-now.io/api/v1/subscription/addmq', this.form)
                             .then((response) => {
                                 window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
