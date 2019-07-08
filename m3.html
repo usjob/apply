@@ -34,13 +34,17 @@
 <body>
     <div id="app">
         <v-app light>
-           
+            <v-toolbar class="white" v-if="is_results">
+                <v-toolbar-title>
+                    {{ title }}
+                </v-toolbar-title>
+            </v-toolbar>
             <v-content>
 
 
                 <v-layout column align-center justify-center>
                     <v-container fluid>
-                        <v-flex xs12 md6 offset-md3>
+                        <v-flex xs12 md6 offset-md3 v-if="!is_results">
                             
                             <v-card class="elevation-2 mb-2 round-list white">
                                 <v-card-text>
@@ -69,11 +73,68 @@
                                     
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
+                                    <v-btn depressed round block color="primary" :href="items.length > 0 ? items[0].url : ''" @click="subscribe()" :disabled="disabled" class="button" target="_blank">Apply Now</v-btn>
+                                    <!-- <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn> -->
                                 </v-card-actions>
                             </v-card>
                             <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                             
+                            
+                        </v-flex>
+
+
+                        <!-- results -->
+                        <v-flex xs12 md6 offset-md3 v-if="is_results">
+                                <p class="text-xs-center" v-if="items.length > 0">
+                                    <v-icon small color="green">check_circle</v-icon>
+                                    Current {{ form.q }} openings in {{ location }}- click to apply!
+                                </p>
+                                <v-list three-line class="grey lighten-5" v-if="items.length > 0">
+                                    <template v-for="(item, index) in sponsored">
+                                        <!-- && item.price=='high' -->
+                                        <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
+                                            :key="index">
+                                            <!-- <v-list-tile-avatar tile size="48" class="mt-1">
+                                                <img :src="item.logo_url">
+                                            </v-list-tile-avatar> -->
+    
+                                            <v-list-tile-content class="mt-1">
+                                                <v-list-tile-title class="blue--text text--darken-3">
+                                                    <strong>{{ normalize(item.title) }}</strong>
+                                                </v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
+                                            </v-list-tile-content>
+    
+                                            <!-- <v-list-tile-action>
+                                                <v-btn depressed round small color="primary">Apply</v-btn>
+                                            </v-list-tile-action> -->
+    
+                                        </v-list-tile>
+    
+                                    </template>
+                                    <template v-for="(item, index) in items">
+                                        <!-- && item.price=='high' -->
+                                        <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
+                                            :key="index">
+                                            <!-- <v-list-tile-avatar tile size="48" class="mt-1">
+                                                <img :src="item.logo_url">
+                                            </v-list-tile-avatar> -->
+    
+                                            <v-list-tile-content class="mt-1">
+                                                <v-list-tile-title class="blue--text text--darken-3">
+                                                    <strong>{{ normalize(item.title) }}</strong>
+                                                </v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
+                                            </v-list-tile-content>
+    
+                                            <!-- <v-list-tile-action>
+                                                <v-btn depressed round small color="primary">Apply</v-btn>
+                                            </v-list-tile-action> -->
+    
+                                        </v-list-tile>
+    
+                                    </template>
+                                </v-list>
                         </v-flex>
                     </v-container>
                 </v-layout>
@@ -90,7 +151,7 @@
             data() {
                 return {
                     disabled: true,
-                    title: 'Start Your Application',
+                    title: 'Current Openings',
                     k: ['Cashier', 'Sales Associate','Driver', 'Customer Service'],
                     positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     form: {
@@ -100,7 +161,10 @@
                     },
                     show_q: true,
                     show_l: false,
-                    items: []
+                    items: [],
+                    sponsored: [],
+                    is_results: false,
+                    location: ''
                 }
             },
             methods: {
@@ -125,10 +189,11 @@
                     });
                     gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
                     // end ga event
+                    
                     axios.post('https://api.apply-now.io/api/v1/subscription/addmq', this.form)
                             .then((response) => {
-                                this.goto(this.items[0].url)
-                                window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
+                                this.is_results = true;
+                                // window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
                             })
                 },
                 encodeUrl(q) {
@@ -165,9 +230,14 @@
                                 data
                             }) => {
                                 this.form['zipcode'] = data.zip
+                                this.location = data.city + ',' + data.region_code
                                 this.getResult()
                             })
                     }
+                },
+                normalize(s) {
+                    if (s.length > 30) return s.substring(0, 30) + '...'
+                    return s
                 },
                 getResult() {
                     let url = "https://api.apply-now.io/api/v1/ja/0/" + this.encodeUrl(this.form['q']) + "/" + this.form['zipcode']
