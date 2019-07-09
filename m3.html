@@ -73,7 +73,7 @@
                                     
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" :href="items.length > 0 ? items[0].url : ''" @click="subscribe()" :disabled="disabled" class="button" target="_blank">Apply Now</v-btn>
+                                    <v-btn depressed round block color="primary" :href="items.length > 0 ? 'https://api.apply-now.io/api/v1/go?u='+items[0].url : ''" @click="subscribe()" :disabled="disabled" class="button" target="_blank">Apply Now</v-btn>
                                     <!-- <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn> -->
                                 </v-card-actions>
                             </v-card>
