@@ -178,7 +178,7 @@
                 goto(url) {
                     // ga event
                     gtag('event', 'click_job', {
-                        'event_category': 'click_m3',
+                        'event_category': 'm3_click',
                         'event_label':this.url,
                         'value': 0
                     });
@@ -210,8 +210,22 @@
                     return encodeURI(q1)
                 },
                 checkdisabled() {
-                    if(this.form['mobile'] !='' && this.form['zipcode'] != '' && this.form['q'] != '') this.disabled = false;
+                    // ga event
+                    if(this.form['mobile']  != '') {
+                        gtag('event', 'contact_entered', {
+                            'event_category': 'm3_enter',
+                            'event_label': window.btoa(this.form['mobile']),
+                            'value': 0
+                        });
+                    }
+                    // end ga event
+                    if(this.form['mobile']  != '' && this.validatePhone(this.form['mobile'] ) === false) alert('Invalid phone number.')
+                    if(this.form['mobile'] !='' && this.form['zipcode'] != '' && this.form['q'] != '' && this.validatePhone(this.form['mobile'])) this.disabled = false;
                     else this.disabled = true;
+                },
+                validatePhone(p) {
+                    var patt = new RegExp("[0-9]{10}");
+                    return patt.test(p);
                 },
                 checkTitle(a, q, c) {
                     a1 = a.toLowerCase()
