@@ -34,25 +34,35 @@
 <body>
     <div id="app">
         <v-app light>
-           
+            <v-toolbar class="white" v-if="is_results">
+                <v-toolbar-title>
+                    {{ title }}
+                </v-toolbar-title>
+            </v-toolbar>
             <v-content>
 
 
                 <v-layout column align-center justify-center>
                     <v-container fluid>
-                        <v-flex xs12 md6 offset-md3>
-                            
+                        <v-flex xs12 md6 offset-md3 v-if="!is_results">
+                            <p class="text-xs-center">
+                                    <img src="https://usjob.github.io/r/logo.png" alt="" height="20">
+                            </p>
+
                             <v-card class="elevation-2 mb-2 round-list white">
                                 <v-card-text>
-                                    <div v-if="items.length > 0"  class="text-xs-center">
-                                        <p>
-                                                <img :src="items[0].logo_url" alt="" height="50">
-                                            </p>
-                                            <div>
-                                                    <b>{{ items[0].title }}</b>
+                                    <div class="text-xs-center">
+                                            <div class="grey--text text--darken-1 my-1">
+                                                <b>Now Hiring</b>
                                             </div>
-                                            <div class="grey--text text--darken-1 my-2">{{ items[0].company }} - {{ items[0].city[0] }}</div>
-                                            <div class="caption grey--text text--lighten-1" v-html="items[0].description+'...'"></div>
+                                            <div class="subheading">
+                                                
+                                                <b>{{ jt }} Jobs</b>
+                                            </div>
+                                            <div class="grey--text text--darken-1 my-2">{{ location }}</div>
+                                            <div class="caption grey--text text--lighten-1">
+                                                Local companies are hiring {{ form.q }}. Great Benefits with health insurance.  401k...
+                                            </div>
                                         </div>
 
                                 </v-card-text>
@@ -69,11 +79,68 @@
                                     
                                 </v-card-text>
                                 <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
+                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled" class="button" target="_blank">Apply Now</v-btn>
+                                    <!-- <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn> -->
                                 </v-card-actions>
                             </v-card>
                             <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
                             
+                            
+                        </v-flex>
+
+
+                        <!-- results -->
+                        <v-flex xs12 md6 offset-md3 v-if="is_results">
+                                <p class="text-xs-center" v-if="items.length > 0">
+                                    <v-icon small color="green">check_circle</v-icon>
+                                    Current {{ form.q }} openings in {{ location }}- click to apply!
+                                </p>
+                                <v-list three-line class="grey lighten-5" v-if="items.length > 0">
+                                    <template v-for="(item, index) in sponsored">
+                                        <!-- && item.price=='high' -->
+                                        <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
+                                            :key="index">
+                                            <!-- <v-list-tile-avatar tile size="48" class="mt-1">
+                                                <img :src="item.logo_url">
+                                            </v-list-tile-avatar> -->
+    
+                                            <v-list-tile-content class="mt-1">
+                                                <v-list-tile-title class="blue--text text--darken-3">
+                                                    <strong>{{ normalize(item.title) }}</strong>
+                                                </v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
+                                            </v-list-tile-content>
+    
+                                            <!-- <v-list-tile-action>
+                                                <v-btn depressed round small color="primary">Apply</v-btn>
+                                            </v-list-tile-action> -->
+    
+                                        </v-list-tile>
+    
+                                    </template>
+                                    <template v-for="(item, index) in items">
+                                        <!-- && item.price=='high' -->
+                                        <v-list-tile class="elevation-2 mb-2 round-list white" @click="goto(item.url)"
+                                            :key="index">
+                                            <!-- <v-list-tile-avatar tile size="48" class="mt-1">
+                                                <img :src="item.logo_url">
+                                            </v-list-tile-avatar> -->
+    
+                                            <v-list-tile-content class="mt-1">
+                                                <v-list-tile-title class="blue--text text--darken-3">
+                                                    <strong>{{ normalize(item.title) }}</strong>
+                                                </v-list-tile-title>
+                                                <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
+                                            </v-list-tile-content>
+    
+                                            <!-- <v-list-tile-action>
+                                                <v-btn depressed round small color="primary">Apply</v-btn>
+                                            </v-list-tile-action> -->
+    
+                                        </v-list-tile>
+    
+                                    </template>
+                                </v-list>
                         </v-flex>
                     </v-container>
                 </v-layout>
@@ -90,7 +157,7 @@
             data() {
                 return {
                     disabled: true,
-                    title: 'Start Your Application',
+                    title: 'Current Openings',
                     k: ['Cashier', 'Sales Associate','Driver', 'Customer Service'],
                     positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     form: {
@@ -98,9 +165,13 @@
                         q: "Truck Driver",
                         zipcode: ""
                     },
+                    jt: '',
                     show_q: true,
                     show_l: false,
-                    items: []
+                    items: [],
+                    sponsored: [],
+                    is_results: false,
+                    location: ''
                 }
             },
             methods: {
@@ -112,6 +183,14 @@
                     return vars;
                 },
                 goto(url) {
+                    // ga event
+                    gtag('event', 'click_job', {
+                        'event_category': 'm4_click',
+                        'event_label':this.url,
+                        'value': 0
+                    });
+                    gtag('event', 'conversion', {'send_to': 'AW-770861134/e8BoCKXb9aQBEM7Qye8C'});
+                    // end ga event
                     url = 'https://api.apply-now.io/api/v1/go?u='+url;
                     let newTab = window.open();
                     newTab.location.href = url;
@@ -125,10 +204,12 @@
                     });
                     gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
                     // end ga event
+                    
                     axios.post('https://api.apply-now.io/api/v1/subscription/addmq', this.form)
                             .then((response) => {
-                                this.goto(this.items[0].url)
-                                window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
+                                this.getData(1)
+                                this.is_results = true;
+                                // window.location.replace('r1.html?l='+this.form['zipcode']+'&m='+window.btoa(this.form['mobile'])+'&q='+this.encodeUrl(this.form['q']));
                             })
                 },
                 encodeUrl(q) {
@@ -137,27 +218,43 @@
                     return encodeURI(q1)
                 },
                 checkdisabled() {
-                    if(this.form['mobile'] !='' && this.form['zipcode'] != '' && this.form['q'] != '') this.disabled = false;
+                    // ga event
+                    if(this.form['mobile']  != '') {
+                        gtag('event', 'contact_entered', {
+                            'event_category': 'm4_enter',
+                            'event_label': window.btoa(this.form['mobile']),
+                            'value': 0
+                        });
+                    }
+                    // end ga event
+                    if(this.form['mobile']  != '' && this.validatePhone(this.form['mobile'] ) === false) alert('Invalid phone number.')
+                    if(this.form['mobile'] !='' && this.form['zipcode'] != '' && this.form['q'] != '' && this.validatePhone(this.form['mobile'])) this.disabled = false;
                     else this.disabled = true;
                 },
-                checkTitle(a, q, c) {
+                validatePhone(p) {
+                    var patt = new RegExp("[0-9]{10}");
+                    return patt.test(p);
+                },
+                checkTitle(a, q, c, sponsored=0) {
                     a1 = a.toLowerCase()
                     q1 = q.toLowerCase()
                     c1 = c.toLowerCase()
                     
                     
-                    if(q1.includes('truck')) {
-                        let e1 = ["Stevens Transport","Starsky Robotics","Buchanan Hauling","Dick Lavy","BCT","Southwestern Nevada","FedEx Custom Critical","Instacart","Boyd Brothers Transportation","CalArk","Tyson Foods","Schneider", "Uber"];
+                    if(q1.includes('truck') || q1.includes('cdl') || q1.includes('driver')) {
+                        let e1 = ["Stevens Transport","Starsky Robotics","Buchanan Hauling","Dick Lavy","BCT","Southwestern Nevada","FedEx Custom Critical","Instacart","Boyd Brothers Transportation","CalArk","Tyson Foods","Schneider", "Uber","Avon"];
                         for(let i=0; i<e1.length; i++) {
                             
-                            if(c1.includes(e1[i].toLowerCase()))  return false;
+                            if(c1.includes(e1[i].toLowerCase())) return false;
                         }
                     }
                     if (c1.includes('ad') || c1.includes('confidential') || c1.includes('stevens trucking'))
                         return false;
-                    return a1.includes(q1);
+
+                    if(!sponsored) return a1.includes(q1);
+                    return true;
                 },
-                getData() {
+                getData(sponsored) {
                     if(this.form['zipcode'] != '') this.getResult()
                     else {
                         axios.get('https://api.apply-now.io/api/v1/ip/current')
@@ -165,20 +262,30 @@
                                 data
                             }) => {
                                 this.form['zipcode'] = data.zip
-                                this.getResult()
+                                this.location = data.city + ',' + data.region_code
+                                this.getResult(sponsored)
                             })
                     }
                 },
-                getResult() {
-                    let url = "https://api.apply-now.io/api/v1/ja/0/" + this.encodeUrl(this.form['q']) + "/" + this.form['zipcode']
+                normalize(s) {
+                    if (s.length > 30) return s.substring(0, 30) + '...'
+                    return s
+                },
+                getResult(sponsored) {
+                    let init = '';
+                    if(sponsored) { init = "https://api.apply-now.io/api/v1/j/0/"}
+                    else { init = "https://api.apply-now.io/api/v1/ja/0/"}
+                    
+                    let url =  init+ this.encodeUrl(this.form['q']) + "/" + this.form['zipcode']
                     axios
                         .get(url)
                         .then(response => {
                             let temp = _.filter(response.data['jobs'], (v, k)=> {
-                                return this.checkTitle(v.title, this.form['q'], v.company)
+                                return this.checkTitle(v.title, this.form['q'], v.company,sponsored)
                             })
 
-                            this.items = _.uniqBy(temp, 'company');
+                            if(sponsored) this.sponsored = _.uniqBy(temp, 'company');
+                            else  this.items = _.uniqBy(temp, 'company');
                         });
                 }
             },
@@ -186,7 +293,9 @@
                 let vars = this.getUrlVars()
                 if('q' in vars) this.form['q'] = decodeURI(this.getUrlVars()['q']);
                 if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
-                this.getData()
+                if(this.form['q'].toLowerCase().includes('truck')) this.jt = 'Student CDL'
+                else this.jt = this.form['q']
+                this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
                 if(this.form['zipcode'] != '') this.show_l = false
             }
