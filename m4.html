@@ -45,23 +45,18 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3 v-if="!is_results">
-                            <p class="text-xs-center">
-                                    <img src="https://usjob.github.io/r/logo.png" alt="" height="20">
-                            </p>
+                            
 
                             <v-card class="elevation-2 mb-2 round-list white">
                                 <v-card-text>
                                     <div class="text-xs-center">
-                                            <div class="grey--text text--darken-1 my-1">
-                                                <b>Now Hiring</b>
-                                            </div>
                                             <div class="subheading">
                                                 
-                                                <b>{{ jt }} Jobs</b>
+                                                <b>{{ jt }} Jobs Hiring Now - {{ subtitle}}</b>
                                             </div>
                                             <div class="grey--text text--darken-1 my-2">{{ location }}</div>
                                             <div class="caption grey--text text--lighten-1">
-                                                Local companies are hiring {{ form.q }}. Great Benefits with health insurance.  401k...
+                                                Local trucking customer is looking for {{ form.q }} jobs. Great Benefits with health insurance.  401k...
                                             </div>
                                         </div>
 
@@ -84,7 +79,9 @@
                                 </v-card-actions>
                             </v-card>
                             <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
-                            
+                            <p class="text-xs-center grey--text mt-3">
+                                    Powered by <img src="https://usjob.github.io/r/logo.png" alt="" height="10">
+                            </p>
                             
                         </v-flex>
 
@@ -141,6 +138,8 @@
     
                                     </template>
                                 </v-list>
+
+                                
                         </v-flex>
                     </v-container>
                 </v-layout>
@@ -162,7 +161,7 @@
                     positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     form: {
                         mobile: "",
-                        q: "Truck Driver",
+                        q: "Full Time",
                         zipcode: ""
                     },
                     jt: '',
@@ -171,7 +170,8 @@
                     items: [],
                     sponsored: [],
                     is_results: false,
-                    location: ''
+                    location: '',
+                    subtitle: 'Apply Today'
                 }
             },
             methods: {
@@ -293,7 +293,10 @@
                 let vars = this.getUrlVars()
                 if('q' in vars) this.form['q'] = decodeURI(this.getUrlVars()['q']);
                 if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
-                if(this.form['q'].toLowerCase().includes('truck')) this.jt = 'Student CDL'
+                if(this.form['q'].toLowerCase().includes('truck')) {
+                    this.jt = 'Student CDL'
+                    this.subtitle = 'Up to $10,000 Sign On Bonus'
+                }
                 else this.jt = this.form['q']
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
