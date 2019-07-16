@@ -263,7 +263,7 @@
                             }) => {
                                 this.form['zipcode'] = data.zip
                                 this.location = data.city + ',' + data.region_code
-                                this.getResult(sponsored)
+                                if(this.form['q']!='') this.getResult(sponsored)
                             })
                     }
                 },
