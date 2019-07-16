@@ -161,7 +161,7 @@
                     positions: ['Cashier', 'Sales Associate', 'Stock Associate', 'Driver', 'Customer Service', 'Manager'],
                     form: {
                         mobile: "",
-                        q: "Full Time",
+                        q: "",
                         zipcode: ""
                     },
                     jt: '',
@@ -296,8 +296,7 @@
                 if(this.form['q'].toLowerCase().includes('truck')) {
                     this.jt = 'Student CDL'
                     this.subtitle = 'Up to $10,000 Sign On Bonus'
-                }
-                else this.jt = this.form['q']
+                } else this.jt = this.form['q']
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
                 if(this.form['zipcode'] != '') this.show_l = false
