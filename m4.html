@@ -199,7 +199,7 @@
                     // ga event
                     gtag('event', 'subscribe', {
                         'event_category': 'm4_submitted',
-                        'event_label': window.btoa(this.form['mobile']),
+                        'event_label': window.btoa(this.form['mobile'])+'['+this.form['zipcode'] +']['+ this.form['q']+']',
                         'value': 2
                     });
                     gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'});
