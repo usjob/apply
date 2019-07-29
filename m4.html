@@ -294,7 +294,7 @@
                 if('q' in vars) this.form['q'] = decodeURI(this.getUrlVars()['q']);
                 if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
                 if(this.form['q'].toLowerCase().includes('truck')) {
-                    this.jt = 'CDL Driver Jobs'
+                    this.jt = 'CDL Driver '
                     this.subtitle = 'No Exp Needed - Apply Today'
                 } else this.jt = this.form['q']
                 this.getData(0)
