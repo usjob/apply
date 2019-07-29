@@ -166,7 +166,7 @@
                     },
                     jt: '',
                     show_q: true,
-                    show_l: false,
+                    show_l: true,
                     items: [],
                     sponsored: [],
                     is_results: false,
@@ -299,7 +299,7 @@
                 } else this.jt = this.form['q']
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
-                if(this.form['zipcode'] != '') this.show_l = false
+                if(!this.form['zipcode'] !== null || this.form['zipcode'] != '') this.show_l = false
             }
         })
     </script>
