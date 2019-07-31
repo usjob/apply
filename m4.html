@@ -263,6 +263,10 @@
                             }) => {
                                 this.form['zipcode'] = data.zip
                                 this.location = data.city + ',' + data.region_code
+
+                                if(/[0-9]{5}/.test(this.form['zipcode'])) this.show_l = false
+                                else this.show_l = true
+                                
                                 if(this.form['q']!='') this.getResult(sponsored)
                             })
                     }
@@ -299,9 +303,6 @@
                 } else this.jt = this.form['q']
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
-                
-                if(/[0-9]{5}/.test(this.form['zipcode'])) this.show_l = false
-                else this.show_l = true
             }
         })
     </script>
