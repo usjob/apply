@@ -299,7 +299,9 @@
                 } else this.jt = this.form['q']
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
-                if(!this.form['zipcode'] !== null || this.form['zipcode'] != '') this.show_l = false
+                
+                if(/[0-9]{5}/.test(this.form['zipcode'])) this.show_l = false
+                else this.show_l = true
             }
         })
     </script>
