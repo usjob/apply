@@ -301,6 +301,7 @@
                     this.jt = 'CDL Driver '
                     this.subtitle = 'No Exp Needed - Apply Today'
                 } else this.jt = this.form['q']
+                if(/[0-9]{5}/.test(this.form['zipcode'])) this.show_l = false
                 this.getData(0)
                 if(this.form['q'] != '') this.show_q = false
             }
