@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job List</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <link href="https://cloudjs.github.io/js/vuetify.min.css" rel="stylesheet">
+    <script src="https://cloudjs.github.io/js/vue.min.js"></script>
+    <script src="https://cloudjs.github.io/js/vuetify.min.js"></script>
+    <style>
+        .v-list--three-line .v-list__tile {
+            height: 72px !important;
+        }
+
+        .round-list {
+            border-radius: 10px;
+        }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142791202-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-142791202-1');
+        gtag('config', 'AW-770861134');
+    </script>
+
+</head>
+
+<body>
+    <div id="app">
+        <v-app light>
+            <v-toolbar class="white">
+                <v-toolbar-title>
+                    {{ title }}
+                </v-toolbar-title>
+            </v-toolbar>
+            <v-content>
+
+
+                <v-layout column align-center justify-center>
+                    <v-container fluid>
+                        <v-flex xs12 md6 offset-md3>
+                            <p style="font-weight: bold; font-size:25px;">Truck Driver Salaries Rising on Surging Demand</p>
+                            <p>
+                                According to WSJ, Wages and benefits for truck drivers are rising in the U.S. as tight freight-hauling
+                                capacity falls short of surging demand.
+                            </p>
+                            <p>
+                                The American Trucking Associations, a trade group that represents fleet owners, said
+                                annual truck-driver salaries rose between 15% and 18% from 2013 to 2017, with growth
+                                varying based on the type of fleet and the nature of the routes.
+                            </p>
+                            <p>
+                                Some private-fleet drivers earned as much as <b>$86,000</b> annually in 2017, up from $73,000
+                                in the group’s 2013 survey, on top of benefits packages that included new paid leave
+                                offers and more-generous retirement plans. The survey showed the median salary for a
+                                truckload driver working a national, irregular route—essentially an entry-level driving
+                                position—was $53,000, up $7,000 or 15% from 2013. <a href="https://www.wsj.com/articles/truck-driver-salaries-rising-on-surging-freight-demand-1522253864" style="color:grey;" target="_blank" rel="nofollow noopener">Read more</a>
+                            </p>
+                            
+                        </v-flex>
+                    </v-container>
+                </v-layout>
+            </v-content>
+        </v-app>
+    </div>
+
+    <script src="https://cloudjs.github.io/js/axios.min.js"></script>
+    <script src="https://cloudjs.github.io/js/lodash.min.js"></script>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    title: 'Lablue',
+                    items: [],
+                    l: "",
+                    q: "Driver"
+                }
+            },
+            methods: {
+                getUrlVars() {
+                    var vars = {};
+                    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key,
+                    value) {
+                        vars[key] = value;
+                    });
+                    return vars;
+                },
+                goto(url) {
+                    // ga event
+                    gtag('event', 'click_job', {
+                        'event_category': 'click_r1',
+                        'event_label': this.url,
+                        'value': 0
+                    });
+                    gtag('event', 'conversion', {
+                        'send_to': 'AW-770861134/e8BoCKXb9aQBEM7Qye8C'
+                    });
+                    // end ga event
+                    url = 'https://api.apply-now.io/api/v1/go?u=' + url;
+                    let newTab = window.open();
+                    newTab.location.href = url;
+                },
+                getData() {
+                    let url = "https://api.apply-now.io/api/v1/ja/0/" + this.encodeUrl(this.q) + "/" + this.l
+                    axios
+                        .get(url)
+                        .then(response => {
+                            this.items = _.uniqBy(response.data['jobs'], 'company');
+                        });
+                },
+                encodeUrl(q) {
+                    q1 = q.replace('/', ' ')
+                    q1 = q1.replace(/\s{2,}/i, " ")
+                    return encodeURI(q1)
+                },
+                checkTitle(a, q, c) {
+                    a1 = a.toLowerCase()
+                    q1 = q.toLowerCase()
+                    c1 = c.toLowerCase()
+                    if (c1.includes('ad') || c1.includes('confidential') || c1.includes('stevens trucking'))
+                        return false;
+                    return a1.includes(q1);
+                },
+                normalize(s) {
+                    if (s.length > 20) return s.substring(0, 20) + '...'
+                    return s
+                }
+            },
+            created() {
+                this.l = decodeURI(this.getUrlVars()['l']);
+                this.q = decodeURI(this.getUrlVars()['q']);
+                this.getData();
+            },
+        })
+    </script>
+</body>
+
+</html>
