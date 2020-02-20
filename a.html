@@ -65,7 +65,35 @@
                                 truckload driver working a national, irregular route—essentially an entry-level driving
                                 position—was $53,000, up $7,000 or 15% from 2013. <a href="https://www.wsj.com/articles/truck-driver-salaries-rising-on-surging-freight-demand-1522253864" style="color:grey;" target="_blank" rel="nofollow noopener">Read more</a>
                             </p>
-                            
+                            <v-text-field label="Position" v-model="q" box @blur="getData()" style="margin-top:900px;"></v-text-field>
+                            <p>
+                                <v-icon small color="green">check_circle</v-icon>
+                                All companies hiring {{ q }}. Click to apply!
+                            </p>
+                            <v-list three-line class="grey lighten-5">
+                                <template v-for="(item, index) in items">
+                                    <!-- && item.price=='high' -->
+                                    <v-list-tile v-if="checkTitle(item.title, q, item.company)"
+                                        class="elevation-2 mb-2 round-list white" @click="goto(item.url)" :key="index">
+                                        <v-list-tile-avatar tile size="48" class="mt-1">
+                                            <img :src="item.logo_url">
+                                        </v-list-tile-avatar>
+
+                                        <v-list-tile-content class="mt-1">
+                                            <v-list-tile-title class="blue--text text--darken-3">
+                                                <strong>{{ normalize(item.company) }}</strong>
+                                            </v-list-tile-title>
+                                            <v-list-tile-sub-title>{{ normalize(item.title) }}</v-list-tile-sub-title>
+                                        </v-list-tile-content>
+
+                                        <v-list-tile-action>
+                                            <v-btn depressed round small color="primary">Apply</v-btn>
+                                        </v-list-tile-action>
+
+                                    </v-list-tile>
+
+                                </template>
+                            </v-list>
                         </v-flex>
                     </v-container>
                 </v-layout>
