@@ -7,7 +7,7 @@ Allow: /
 
 User-agent: AdsBot-Google
 User-agent: adidxbot
-Allow: /lp
+Allow: /
 
 User-agent: 008
 Disallow: /
