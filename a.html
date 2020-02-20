@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Truck Driver Salaries Rising on Surging Demand</title>
+    <title>Job List</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -48,23 +48,7 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
-                            <p style="font-weight: bold; font-size:25px;">Truck Driver Salaries Rising on Surging Demand</p>
-                            <p>
-                                According to WSJ, Wages and benefits for truck drivers are rising in the U.S. as tight freight-hauling
-                                capacity falls short of surging demand.
-                            </p>
-                            <p>
-                                The American Trucking Associations, a trade group that represents fleet owners, said
-                                annual truck-driver salaries rose between 15% and 18% from 2013 to 2017, with growth
-                                varying based on the type of fleet and the nature of the routes.
-                            </p>
-                            <p>
-                                Some private-fleet drivers earned as much as <b>$86,000</b> annually in 2017, up from $73,000
-                                in the group’s 2013 survey, on top of benefits packages that included new paid leave
-                                offers and more-generous retirement plans. The survey showed the median salary for a
-                                truckload driver working a national, irregular route—essentially an entry-level driving
-                                position—was $53,000, up $7,000 or 15% from 2013. <a href="https://www.wsj.com/articles/truck-driver-salaries-rising-on-surging-freight-demand-1522253864" style="color:grey;" target="_blank" rel="nofollow noopener">Read more</a>
-                            </p>
+                           
                             <v-text-field label="Position" v-model="q" box @blur="getData()" style="margin-top:900px;"></v-text-field>
                             <p>
                                 <v-icon small color="green">check_circle</v-icon>
@@ -109,7 +93,7 @@
             el: '#app',
             data() {
                 return {
-                    title: 'Lablue',
+                    title: 'Companies Hiring Now, Apply Today',
                     items: [],
                     l: "",
                     q: "Driver"
