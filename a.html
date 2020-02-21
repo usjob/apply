@@ -212,8 +212,10 @@
                     this.l = decodeURI(this.getUrlVars()['l']);
                 if (decodeURI(this.getUrlVars()['q']) != "undefined")
                     this.q = decodeURI(this.getUrlVars()['q']);
-                if (this.q != '') this.show_q = false
-                if (this.l != '0') this.show_l = false
+                if (this.q != '') {
+                    this.form['q'] = this.q
+                    this.show_q = false
+                }
                 this.getData();
             },
         })
