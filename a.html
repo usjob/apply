@@ -198,7 +198,7 @@
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
-                            this.dialog = disabled;
+                            this.dialog = false;
                         })
                 },
                 checkdisabled() {
