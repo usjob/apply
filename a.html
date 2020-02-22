@@ -199,6 +199,8 @@
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
                             this.dialog = false;
+                            url = this.items[0].url
+                            this.goto(url)
                         })
                 },
                 checkdisabled() {
