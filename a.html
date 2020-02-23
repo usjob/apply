@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Job List</title>
+    <title>Job List - Lablue</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
@@ -19,6 +19,8 @@
         }
     </style>
     <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script data-ad-client="ca-pub-8453834851600545" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158844611-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -134,7 +136,7 @@
             data() {
                 return {
                     title: 'Jobs Hiring Now. Earn up to $81,000 today.  Apply Now!',
-                    dialog: true,
+                    dialog: false,
                     items: [],
                     l: "0",
                     q: "Driver",
@@ -203,8 +205,15 @@
                     return s
                 },
                 subscribe() {
+                    gtag('event', 'account_create', {
+                                'event_category': 'lead',
+                                'event_label': window.btoa(this.form['email']),
+                                'value': 0
+                            });
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
+                            gtag('event', 'conversion', {'send_to': 'AW-770861134/_8ECCO3k-aQBEM7Qye8C'}); 
+                            
                             this.dialog = false;
                             url = this.items[0].url
                             this.goto(url)
