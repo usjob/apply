@@ -54,7 +54,9 @@
                     <v-dialog v-model="dialog" persistent max-width="300" class="round-list ">
                         <v-card class="elevation-2 mb-2 round-list white">
                             <v-card-title>
-                                <b>Start Your Application</b>
+                                <b style="font-size: 20px;">{{ startCase(q) }} Job Offers</b>
+                                <span>500+ Found for You. Get Started Today.</span>
+
                             </v-card-title>
                             <v-card-text>
                                 <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
@@ -69,8 +71,13 @@
                                     texts for our newsletters. Consent not required for use of services.</small>
                             </v-card-text>
                             <v-card-actions class="pb-4">
-                                <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">
-                                    Apply Now</v-btn>
+                                <v-btn flat text @click="skip()" class="muted grey--text">
+                                    skip
+                                </v-btn>
+                                <v-spacer></v-spacer>
+                                <v-btn depressed round color="primary" @click="subscribe()" :disabled="disabled">
+                                    Continue</v-btn>
+
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -81,7 +88,7 @@
                 <v-layout column align-center justify-center>
                     <v-container fluid>
                         <v-flex xs12 md6 offset-md3>
-                            <p style="font-size: 18px; font-weight: bold;">{{ title }}</p>
+                            <p style="font-size: 18px; font-weight: bold;">{{ startCase(q) }} {{ title }}</p>
                             <v-text-field label="Position" v-model="q" box @blur="getData()"></v-text-field>
                             <p>
                                 <v-icon small color="green">check_circle</v-icon>
@@ -203,11 +210,20 @@
                             this.goto(url)
                         })
                 },
+                skip() {
+                    this.dialog = false;
+                    url = this.items[0].url
+                    this.goto(url)
+                },
                 checkdisabled() {
                     if (this.form['email'] != '' && this.form['zipcode'] != '' && this.form['q'] != '') this
                         .disabled = false;
                     else this.disabled = true;
-                }
+                },
+                startCase(q) {
+                    return _.startCase(q)
+                },
+
             },
             created() {
                 if (decodeURI(this.getUrlVars()['l']) != "undefined")
@@ -215,8 +231,8 @@
                 if (decodeURI(this.getUrlVars()['q']) != "undefined")
                     this.q = decodeURI(this.getUrlVars()['q']);
                 if (this.q != '') {
-                    this.form['q'] = this.q
-                    this.show_q = false
+                    this.form['q'] = this.startCase(this.q)
+                    // this.show_q = false
                 }
                 this.getData();
             },
