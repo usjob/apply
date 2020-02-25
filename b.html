@@ -173,7 +173,7 @@
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
                             
-                            url = 'http://127.0.0.1:5500/br.html?q='+this.form['q']+'&l='+this.form['zipcode']
+                            url = 'https://www.lablue.io/br.html?q='+this.form['q']+'&l='+this.form['zipcode']
 
                             let newTab = window.open();
                             newTab.location.href = url;
