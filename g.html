@@ -171,7 +171,8 @@
                     form: {
                         email: "",
                         q: "",
-                        zipcode: ""
+                        zipcode: "",
+                        name: ""
                     },
                     show_q: true,
                     show_l: true,
@@ -251,37 +252,15 @@
                 onSignIn(user) {
                     const profile = user.getBasicProfile()
                     this.form['email'] = profile.getEmail()
-                    var id = profile.getId()
-                    var name = profile.getName()
-                    var image = profile.getImageUrl()
+                    this.form['name'] = profile.getName()
 
-                    this.postToGoogle(id, name, image, this.form['email'], this.form['q'], this.form['zipcode'])
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
                             this.dialog = false;
                             url = this.items[0].url
                             this.goto(url)
                         })
-                },
-                postToGoogle(id, name, image, email, q, zipcode) {
-                    axios({
-                        method: 'post',
-                        url: 'https://docs.google.com/forms/d/e/1FAIpQLSe8dypiJjY4Bo8Lo3eH6Gu7cHNebLn2FWV_AEPDKA_3tIN-0Q/formResponse',
-                        data: {
-                            'entry.1009484114': id,
-                            'entry.125932232': name,
-                            'entry.72713748': email,
-                            'entry.1172370490': q,
-                            'entry.120195093': image,
-                            'entry.925344525': zipcode
-                        },
-                            headers: {
-                                'Content-Type': 'application/xml',
-                                'crossDomain': true
-                            }
-                    });
                 }
-
             },
             created() {
                 if (decodeURI(this.getUrlVars()['l']) != "undefined")
