@@ -20,7 +20,8 @@
     </style>
 
     <script src="https://apis.google.com/js/platform.js"></script>
-    <meta name="google-signin-client_id" content="1011809488584-l50mh0ph53q3njeo9juma2s6amnl9lgq.apps.googleusercontent.com">
+    <meta name="google-signin-client_id"
+        content="1011809488584-l50mh0ph53q3njeo9juma2s6amnl9lgq.apps.googleusercontent.com">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-158844611-1"></script>
@@ -76,10 +77,9 @@
                                     skip
                                 </v-btn>
                                 <v-spacer></v-spacer> -->
-                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
                                 <div id="google-signin-button"></div>
-                                <v-btn depressed block round color="primary" @click="subscribe()" :disabled="disabled">
-                                    Continue</v-btn>
+                                <!-- <v-btn depressed block round color="primary" @click="subscribe()" :disabled="disabled">
+                                    Continue</v-btn> -->
 
                             </v-card-actions>
                         </v-card>
@@ -118,7 +118,7 @@
                             <p class="mt-1" style="font-size:14px; font-weight: bold;">
                                 Click to apply now!
                             </p>
-                            
+
                             <v-list three-line flat class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                     <!-- && item.price=='high' -->
@@ -248,13 +248,36 @@
                 startCase(q) {
                     return _.startCase(q)
                 },
-                onSignIn (user) {
-      const profile = user.getBasicProfile()
-      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); 
-    }
+                onSignIn(user) {
+                    const profile = user.getBasicProfile()
+                    this.form['email'] = profile.getEmail()
+                    var id = profile.getId()
+                    var name = profile.getName()
+                    var image = profile.getImageUrl()
+
+                    this.postToGoogle(id, name, image, this.form['email'], this.form['q'], this.form['zipcode'])
+                    axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
+                        .then((response) => {
+                            this.dialog = false;
+                            url = this.items[0].url
+                            this.goto(url)
+                        })
+                },
+                postToGoogle(id, name, image, email, q, zipcode) {
+                    $.ajax({
+                        data: {
+                            'entry.1009484114': id,
+                            'entry.125932232': name,
+                            'entry.72713748': email,
+                            'entry.1172370490': q,
+                            'entry.120195093': image,
+                            'entry.925344525': zipcode
+                        },
+                        type: "POST",
+                        url: "https://docs.google.com/forms/d/e/1FAIpQLSe8dypiJjY4Bo8Lo3eH6Gu7cHNebLn2FWV_AEPDKA_3tIN-0Q/formResponse",
+                        dataType: "xml"
+                    });
+                }
 
             },
             created() {
@@ -269,10 +292,10 @@
                 this.getData();
             },
             mounted() {
-    gapi.signin2.render('google-signin-button', {
-      onsuccess: this.onSignIn
-    })
-  }
+                gapi.signin2.render('google-signin-button', {
+                    onsuccess: this.onSignIn
+                })
+            }
         })
 
 
