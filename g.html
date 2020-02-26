@@ -250,12 +250,13 @@
                     return _.startCase(q)
                 },
                 onSignIn(user) {
-                    if (!auth2.isSignedIn.get()) 
+                    const profile = user.getBasicProfile()
+                    if (profile.getEmail() != '') 
                     {
                         this.dialog = false;
                         return;
                     }
-                    const profile = user.getBasicProfile()
+                    
                     this.form['email'] = profile.getEmail()
                     this.form['name'] = profile.getName()
 
