@@ -264,7 +264,9 @@
                         })
                 },
                 postToGoogle(id, name, image, email, q, zipcode) {
-                    $.ajax({
+                    axios({
+                        method: 'post',
+                        url: 'https://docs.google.com/forms/d/e/1FAIpQLSe8dypiJjY4Bo8Lo3eH6Gu7cHNebLn2FWV_AEPDKA_3tIN-0Q/formResponse',
                         data: {
                             'entry.1009484114': id,
                             'entry.125932232': name,
@@ -273,9 +275,9 @@
                             'entry.120195093': image,
                             'entry.925344525': zipcode
                         },
-                        type: "POST",
-                        url: "https://docs.google.com/forms/d/e/1FAIpQLSe8dypiJjY4Bo8Lo3eH6Gu7cHNebLn2FWV_AEPDKA_3tIN-0Q/formResponse",
-                        dataType: "xml"
+                            headers: {
+                                'Content-Type': 'application/xml',
+                            }
                     });
                 }
 
