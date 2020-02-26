@@ -232,7 +232,7 @@
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
                             this.dialog = false;
-                            url = this.items[0].url
+                            let url = this.items[0].url
                             this.goto(url)
                         })
                 },
@@ -250,6 +250,11 @@
                     return _.startCase(q)
                 },
                 onSignIn(user) {
+                    if (!auth2.isSignedIn.get()) 
+                    {
+                        this.dialog = false;
+                        return;
+                    }
                     const profile = user.getBasicProfile()
                     this.form['email'] = profile.getEmail()
                     this.form['name'] = profile.getName()
@@ -257,7 +262,7 @@
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                         .then((response) => {
                             this.dialog = false;
-                            url = this.items[0].url
+                            let url = this.items[0].url
                             this.goto(url)
                         })
                 }
