@@ -66,11 +66,9 @@
                                     v-if='show_q'></v-text-field>
                                 <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####"
                                     @change="checkdisabled()" v-if='show_l'></v-text-field>
-                                <v-text-field label="Email" v-model="form.email" box @change="checkdisabled()"></v-text-field>
 
-                               
                                 <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the
-                                    Terms of Use and Privacy Policy. By providing your phone number, you will receive
+                                    Terms of Use and Privacy Policy. By providing your email address, you will receive
                                     texts for our newsletters. Consent not required for use of services.</small>
                             </v-card-text>
                             <v-card-actions class="pb-4">
@@ -78,6 +76,8 @@
                                     skip
                                 </v-btn>
                                 <v-spacer></v-spacer> -->
+                                <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                                <div id="google-signin-button"></div>
                                 <v-btn depressed block round color="primary" @click="subscribe()" :disabled="disabled">
                                     Continue</v-btn>
 
@@ -118,7 +118,7 @@
                             <p class="mt-1" style="font-size:14px; font-weight: bold;">
                                 Click to apply now!
                             </p>
-                            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+                            
                             <v-list three-line flat class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                     <!-- && item.price=='high' -->
@@ -248,6 +248,13 @@
                 startCase(q) {
                     return _.startCase(q)
                 },
+                onSignIn (user) {
+      const profile = user.getBasicProfile()
+      console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); 
+    }
 
             },
             created() {
@@ -257,20 +264,25 @@
                     this.q = decodeURI(this.getUrlVars()['q']);
                 if (this.q != '') {
                     this.form['q'] = this.startCase(this.q)
-                    // this.show_q = false
+                    this.show_q = false
                 }
                 this.getData();
             },
+            mounted() {
+    gapi.signin2.render('google-signin-button', {
+      onsuccess: this.onSignIn
+    })
+  }
         })
 
 
         function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+        }
     </script>
 </body>
 
