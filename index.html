@@ -107,14 +107,14 @@
 
                                         <v-list-tile-content class="mt-1">
                                             <v-list-tile-title class="blue--text text--darken-3">
-                                                <strong>{{ normalize(item.company) }}</strong>
+                                                <strong>{{ normalize(item.title) }}</strong>
                                             </v-list-tile-title>
-                                            <v-list-tile-sub-title>{{ normalize(item.title) }}</v-list-tile-sub-title>
+                                            <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
-                                        <!-- <v-list-tile-action>
+                                        <v-list-tile-action>
                                             <v-btn depressed round small color="primary">Apply</v-btn>
-                                        </v-list-tile-action> -->
+                                        </v-list-tile-action>
 
                                     </v-list-tile>
 
@@ -135,7 +135,7 @@
             el: '#app',
             data() {
                 return {
-                    title: 'Jobs Hiring Now. Earn up to $81,000 today.  Apply Now!',
+                    title: 'Jobs',
                     dialog: false,
                     items: [],
                     l: "0",
