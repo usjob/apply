@@ -34,57 +34,52 @@
 <body>
     <div id="app">
         <v-app light>
-            <v-toolbar class="white">
-                <v-toolbar-title>
-                    {{ title }} 
-                </v-toolbar-title>
-            </v-toolbar>
             <v-content>
-
-
-                <v-layout column align-center justify-center>
+                <v-layout column align-center justify-center style="margin-top: 100px;">
                     <v-container fluid>
-                        <v-flex xs12 md6 offset-md3>
-                            <v-card class="elevation-2 mb-2 round-list white">
-                                <v-card-title>
-                                    <b>Start Your Applications</b>
-                                </v-card-title>
-                                <v-card-text>
-                                    <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
-                                    <v-text-field label="Position" v-model="form.q" box  @change="checkdisabled()" v-if='show_q'></v-text-field>
-                                    <v-text-field label="Zipcode" v-model="form.zipcode" box mask="#####" @change="checkdisabled()" v-if='show_l'></v-text-field>
-                                    <v-text-field label="Email" v-model="form.email" box @change="checkdisabled()"></v-text-field>
-                                    <small class="muted grey--text text--lighten-1">By clicking button below, I agree to the Terms of Use and Privacy Policy. By providing your phone number, you will receive texts for our newsletters. Consent not required for use of services.</small>
-                                </v-card-text>
-                                <v-card-actions class="pb-4">
-                                    <v-btn depressed round block color="primary" @click="subscribe()" :disabled="disabled">Apply Now</v-btn>
-                                </v-card-actions>
-                            </v-card>
-                            <p class="pt-3">
-                                <i>Get Hired by Top Employers...</i>
-                            </p>
-                            <v-layout>
+                        <v-flex xs12 md4 offset-md4>
+                                    <v-card class="white">
+                                        <v-card-title>
+                                            <b style="font-size: 20px;">Please enter your email to receive the application.
+                                            </b>
+                                        </v-card-title>
+                                        <v-card-text>
+                                            <p>Directions: </p>
+                                            <p>after submitting name & email you will be directed to the application. </p>
+                                                 
+                                            <p>Mover Labor Warehouse 22hr </p>
+                                                ​
+                                                <p>Application are replied to on a first come, first serve basis. </p>
+                                            <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
+                                            <v-text-field box label="Full Name" v-model="form.name"
+                                                @change="checkdisabled()"></v-text-field>
+                                            <v-text-field box label="Email" v-model="form.email" @change="checkdisabled()">
+                                            </v-text-field>
+                                            <small class="muted grey--text text--lighten-1">By clicking button below, I
+                                                agree to the
+                                                Terms of Use and Privacy Policy.</small>
+                                        </v-card-text>
+                                        <v-card-actions class="pb-4">
+                                            <!-- <v-btn flat text @click="skip()" class="muted grey--text">
+                                                skip
+                                            </v-btn>
+                                            <v-spacer></v-spacer> -->
+                                            <v-btn depressed block round color="primary"
+                                                @click="subscribe()" :disabled="disabled">
+                                                Continue</v-btn>
+
+                                        </v-card-actions>
+                                    </v-card>
+
+
                                 
-                                <v-flex xs3>
-                                    <v-img src="https://logo.clearbit.com/walmart.com" aspect-ratio="1" alta="employer 1"></v-img>
-                                </v-flex>
-                                <v-flex xs1></v-flex>
-                                <v-flex xs3>
-                                    <v-img src="https://logo.clearbit.com/target.com" aspect-ratio="1" alta="employer 2"></v-img>
-                                </v-flex>
-                                <v-flex xs1></v-flex>
-                                <v-flex xs3>
-                                    <v-img src="https://logo.clearbit.com/costco.com" aspect-ratio="1" alta="employer 3"></v-img>
-                                </v-flex>
-                                <v-flex xs1></v-flex>
-                                <v-flex xs3>
-                                    <v-img src="https://logo.clearbit.com/walgreens.com" aspect-ratio="1" alta="employer 3"></v-img>
-                                </v-flex>
-                            </v-layout>
-                            
+
                         </v-flex>
                     </v-container>
                 </v-layout>
+
+
+                
             </v-content>
         </v-app>
     </div>
@@ -118,15 +113,10 @@
                     });
                     return vars;
                 },
-                goto(url) {
-                    url = 'https://api.apply-now.io/api/v1/go?u='+url;
-                    let newTab = window.open();
-                    newTab.location.href = url;
-                },
                 subscribe() {
                     axios.post('https://api.apply-now.io/api/v1/subscription/addq', this.form)
                             .then((response) => {
-                                window.location.replace('retail.html?l='+this.form['zipcode']+'&e='+window.btoa(this.form['email'])+'&q='+this.encodeUrl(this.form['q']));
+                                window.location.href = "/e.html?q=" + decodeURI(this.getUrlVars()['q'])
                             })
                 },
                 encodeUrl(q) {
@@ -142,7 +132,7 @@
             created() {
                 let vars = this.getUrlVars()
                 if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
-                if('q' in vars) this.form['q'] = decodeURI(this.getUrlVars()['q']);
+                if('q' in vars) this.form['q'] = "jobs " + decodeURI(this.getUrlVars()['q']);
                 // if(this.form['q'] != '') this.show_q = false
                 // if(this.form['zipcode'] != '') this.show_l = false
             }
