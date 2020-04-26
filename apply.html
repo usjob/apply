@@ -47,7 +47,7 @@
                                             <p>Directions: </p>
                                             <p>after submitting name & email you will be directed to the application. </p>
                                                  
-                                            <p>Mover Labor Warehouse 22hr </p>
+                                            <p>{{ title }}</p>
                                                 ​
                                                 <p>Application are replied to on a first come, first serve basis. </p>
                                             <!-- <v-select :items="positions" label="Positions" box chips multiple v-model='k'></v-select> -->
@@ -102,7 +102,8 @@
                         zipcode: ""
                     },
                     show_q: true,
-                    show_l: true
+                    show_l: true,
+                    title: ""
                 }
             },
             methods: {
@@ -133,6 +134,7 @@
                 let vars = this.getUrlVars()
                 if('l' in vars) this.form['zipcode'] = decodeURI(this.getUrlVars()['l']);
                 if('q' in vars) this.form['q'] = "jobs " + decodeURI(this.getUrlVars()['q']);
+                if('t' in vars) this.title = decodeURI(this.getUrlVars()['t']);
                 // if(this.form['q'] != '') this.show_q = false
                 // if(this.form['zipcode'] != '') this.show_l = false
             }
