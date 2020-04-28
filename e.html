@@ -3,49 +3,20 @@
 <head>
     <script src="https://cloudjs.github.io/js/axios.min.js"></script>
     <script src="https://cloudjs.github.io/js/lodash.min.js"></script>
+    <meta name="referrer" content="no-referrer" />
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132235786-5"></script>
     <script>
-        function encodeUrl(q) {
-            q1 = q.replace('/', ' ')
-            q1 = q1.replace(/\s{2,}/i, " ")
-            return encodeURI(q1)
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
         }
+        gtag('js', new Date());
 
-        function getUrlVars() {
-            var vars = {};
-            var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-                vars[key] = value;
-            });
-            return vars;
-        }
-
-        function getUrlParam(parameter, defaultvalue) {
-            var urlparameter = defaultvalue;
-            if (window.location.href.indexOf(parameter) > -1) {
-                urlparameter = getUrlVars()[parameter];
-            }
-            return urlparameter;
-        }
-        
-
-        var q = getUrlParam('q', 'driver');
-        var url = "https://api.apply-now.io/api/v1/ja/0/" + encodeUrl(q) + "/0"
-        axios
-            .get(url)
-            .then(response => {
-                var jobs = _.uniqBy(response.data['jobs'], 'company');
-                var u = jobs[0].url
-                var urls = _.map(jobs, function (o) {
-                    var cmp = o.company;
-                    var t = o.title;
-                    if (cmp.includes("SurveyVoices") && q == "survey") return o.url;
-                    if (t.includes(q) && q != "survey") return o.url;
-                });
-                l = _.without(urls, undefined)
-                if (l.length > 0) u = l[0]
-
-                window.location.href = u;
-            });
+        gtag('config', 'UA-132235786-5');
     </script>
+    <script src="e.js"></script>
 </head>
 
 <body>
