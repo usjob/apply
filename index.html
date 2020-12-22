@@ -18,6 +18,10 @@
         .round-list {
             border-radius: 10px;
         }
+        .v-list__tile__title {
+            height: 32px !important;
+            line-height: 32px !important;
+        }
     </style>
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-132235786-5"></script>
@@ -90,25 +94,25 @@
                                 <v-icon small color="green">check_circle</v-icon>
                                 All companies hiring {{ q }}. Click to apply!
                             </p>
-                            <v-list three-line flat class="grey lighten-5">
+                            <v-list two-line flat class="grey lighten-5">
                                 <template v-for="(item, index) in items">
                                     <!-- && item.price=='high' -->
-                                    <v-list-tile v-if="index <= 10" class="mb-2 white"
+                                    <v-list-tile v-if="index < 10 && checkTitle(item.title, q, item.company)" class="mb-2 white"
                                         @click="goto(item.url)" :key="index">
-                                        <v-list-tile-avatar tile size="48" class="mt-1">
+                                        <!-- <v-list-tile-avatar tile size="48" class="mt-1">
                                             <img :src="item.logo_url">
-                                        </v-list-tile-avatar>
+                                        </v-list-tile-avatar> -->
 
-                                        <v-list-tile-content class="mt-1">
-                                            <v-list-tile-title class="blue--text text--darken-3">
+                                        <v-list-tile-content class="mt-3">
+                                            <v-list-tile-title class="headline blue--text text--darken-3 mb-2">
                                                 <strong>{{ normalize(item.title) }}</strong>
                                             </v-list-tile-title>
                                             <v-list-tile-sub-title>{{ normalize(item.company) }}</v-list-tile-sub-title>
                                         </v-list-tile-content>
 
-                                        <v-list-tile-action>
+                                        <!-- <v-list-tile-action>
                                             <v-btn depressed round small color="primary">Apply</v-btn>
-                                        </v-list-tile-action>
+                                        </v-list-tile-action> -->
 
                                     </v-list-tile>
 
@@ -190,9 +194,9 @@
                     a1 = a.toLowerCase()
                     q1 = q.toLowerCase()
                     c1 = c.toLowerCase()
-                    if (c1.includes('ad') || c1.includes('confidential') || c1.includes('stevens trucking'))
+                    if (c1.includes('ad') || c1.includes('confidential'))
                         return false;
-                    return a1.includes(q1);
+                    return true; //a1.includes(q1)
                 },
                 normalize(s) {
                     if (s.length > 45) return s.substring(0, 45) + '...'
